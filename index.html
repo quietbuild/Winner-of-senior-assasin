@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Senior Assassin Finale</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  font-family:Orbitron,sans-serif;
+  background:#050b10;
+  color:#eaffff;
+  overflow:hidden;
+}
+
+/* cinematic background */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(0,255,200,0.25), transparent 55%),
+    radial-gradient(circle at 80% 30%, rgba(0,140,255,0.25), transparent 55%),
+    radial-gradient(circle at 50% 80%, rgba(255,0,120,0.15), transparent 60%);
+  z-index:-2;
+}
+
+/* ================= INTRO SCREEN ================= */
+#intro{
+  position:fixed;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  background:rgba(0,0,0,0.85);
+  z-index:10;
+}
+
+.intro-title{
+  font-size:14px;
+  opacity:0.7;
+  letter-spacing:4px;
+}
+
+.intro-big{
+  font-size:34px;
+  color:#00ffd0;
+  margin-top:10px;
+  animation:pulse 1.2s infinite alternate;
+}
+
+@keyframes pulse{
+  from{transform:scale(1); opacity:0.7;}
+  to{transform:scale(1.05); opacity:1;}
+}
+
+.intro-sub{
+  margin-top:10px;
+  font-size:12px;
+  opacity:0.6;
+}
+
+/* ================= MAIN ================= */
+.container{
+  max-width:900px;
+  margin:auto;
+  padding:20px;
+}
+
+.header{
+  text-align:center;
+  margin-bottom:10px;
+}
+.header h1{
+  font-size:12px;
+  letter-spacing:4px;
+  opacity:0.7;
+}
+.header h2{
+  font-size:22px;
+  color:#00ffd0;
+}
+
+.panel{
+  background:rgba(0,0,0,0.3);
+  border:1px solid rgba(0,255,210,0.2);
+  border-radius:16px;
+  padding:16px;
+  margin:10px 0;
+}
+
+/* WIN SCREEN */
+.win{
+  display:none;
+  text-align:center;
+}
+
+.trophy{
+  font-size:60px;
+  animation:pop 1s ease infinite alternate;
+}
+
+@keyframes pop{
+  from{transform:scale(1);}
+  to{transform:scale(1.1);}
+}
+
+.winner-name{
+  font-size:26px;
+  color:#00ffd0;
+  margin-top:8px;
+}
+
+.sub{
+  font-size:13px;
+  opacity:0.75;
+}
+
+.prize{
+  margin-top:10px;
+  font-size:14px;
+  color:#ffd700;
+}
+
+.card{
+  display:flex;
+  justify-content:space-between;
+  padding:10px;
+  border-radius:12px;
+  margin-top:6px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.08);
+}
+
+.kills{
+  color:#00ffd0;
+}
+
+.out{
+  color:#ff4d6d;
+  font-size:11px;
+  margin-left:6px;
+}
+
+.copyright{
+  text-align:center;
+  font-size:10px;
+  opacity:0.35;
+  letter-spacing:2px;
+  margin-top:20px;
+}
+
+canvas{
+  position:fixed;
+  top:0;
+  left:0;
+  pointer-events:none;
+}
+</style>
+</head>
+
+<body>
+
+<!-- 🎬 INTRO -->
+<div id="intro">
+  <div class="intro-title">SENIOR ASSASSIN</div>
+  <div class="intro-big">38 PLAYERS ENTERED</div>
+  <div class="intro-sub">ONLY ONE SURVIVES...</div>
+</div>
+
+<canvas id="confetti"></canvas>
+
+<div class="container">
+
+  <div class="header">
+    <h1>GRADE 9 SENIOR ASSASSIN</h1>
+    <h2>FINAL SURVIVAL REPORT</h2>
+  </div>
+
+  <!-- WIN SCREEN -->
+  <div class="panel win" id="winScreen">
+
+    <div class="trophy">🏆</div>
+    <div class="winner-name" id="winnerName"></div>
+    <div class="sub" id="winnerKills"></div>
+    <div class="prize">WINNER • $25 GIFT CARD 💰</div>
+
+    <div class="panel" style="margin-top:15px;">
+      <div style="font-size:12px;opacity:0.7;">FINAL TOP 3 (EXEPT WINNER ALL OTHERS ELIMINATED)</div>
+      <div id="top3"></div>
+    </div>
+
+  </div>
+
+  <div class="copyright">© 2026 VRISHAB VARUN</div>
+
+</div>
+
+<script>
+
+/* =========================
+   EDIT ONLY THIS SECTION
+========================= */
+
+const players = [
+  {name:"Dante Larizza", kills:9},
+  {name:"Adriel Callangan", kills:7},
+  {name:"Vrishab Varun", kills:6},
+  {name:"Player 4", kills:3}
+];
+
+/* ========================= */
+
+const intro = document.getElementById("intro");
+const winScreen = document.getElementById("winScreen");
+const winnerName = document.getElementById("winnerName");
+const winnerKills = document.getElementById("winnerKills");
+const top3 = document.getElementById("top3");
+
+/* CONFETTI */
+const canvas = document.getElementById("confetti");
+const ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let pieces = [];
+
+for(let i=0;i<200;i++){
+  pieces.push({
+    x:Math.random()*canvas.width,
+    y:Math.random()*canvas.height,
+    r:Math.random()*6+2,
+    d:Math.random()*10+2,
+    color:`hsl(${Math.random()*360},100%,60%)`
+  });
+}
+
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  pieces.forEach(p=>{
+    ctx.fillStyle=p.color;
+    ctx.fillRect(p.x,p.y,p.r,p.r);
+    p.y += p.d;
+    if(p.y>canvas.height) p.y=0;
+  });
+  requestAnimationFrame(draw);
+}
+
+/* MAIN RENDER */
+function showFinal(){
+
+  const sorted = [...players].sort((a,b)=>b.kills-a.kills);
+
+  const first = sorted[0];
+  const second = sorted[1];
+  const third = sorted[2];
+
+  winnerName.innerText = `👑 ${first.name} WINS`;
+  winnerKills.innerText = `${first.kills} ELIMINATIONS`;
+
+  top3.innerHTML = `
+    <div class="card">🥇 ${first.name} <span class="kills">${first.kills}</span></div>
+    <div class="card">🥈 ${second.name} <span class="out">OUT</span> <span class="kills">${second.kills}</span></div>
+    <div class="card">🥉 ${third.name} <span class="out">OUT</span> <span class="kills">${third.kills}</span></div>
+  `;
+
+  winScreen.style.display="block";
+  draw();
+}
+
+/* INTRO SEQUENCE */
+setTimeout(()=>{
+  intro.style.opacity="0";
+  intro.style.transition="1.2s ease";
+
+  setTimeout(()=>{
+    intro.style.display="none";
+    showFinal();
+  },1200);
+
+},3500);
+
+</script>
+
+</body>
+</html>
