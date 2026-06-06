@@ -1,291 +1,583 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Senior Assassin Finale</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grade 9 Senior Assassin Finale</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+  <!-- GOOGLE ANALYTICS -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y0RZ6ZDJPD"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-Y0RZ6ZDJPD');
+  </script>
 
-<style>
-body{
-  margin:0;
-  font-family:Orbitron,sans-serif;
-  background:#050b10;
-  color:#eaffff;
-  overflow:hidden;
-}
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;800&display=swap" rel="stylesheet">
 
-/* cinematic background */
-body::before{
-  content:"";
-  position:fixed;
-  inset:0;
-  background:
-    radial-gradient(circle at 20% 20%, rgba(0,255,200,0.25), transparent 55%),
-    radial-gradient(circle at 80% 30%, rgba(0,140,255,0.25), transparent 55%),
-    radial-gradient(circle at 50% 80%, rgba(255,0,120,0.15), transparent 60%);
-  z-index:-2;
-}
+  <style>
+    :root {
+      --cyan: #00ffd0;
+      --blue: #4aa3ff;
+      --red: #ff4d6d;
+      --gold: #ffd700;
+      --bg: #050b10;
+      --panel: rgba(255, 255, 255, .055);
+      --line: rgba(0, 255, 210, .18);
+      --muted: rgba(234, 255, 255, .68);
+    }
 
-/* ================= INTRO SCREEN ================= */
-#intro{
-  position:fixed;
-  inset:0;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  text-align:center;
-  background:rgba(0,0,0,0.85);
-  z-index:10;
-}
+    * {
+      box-sizing: border-box;
+    }
 
-.intro-title{
-  font-size:14px;
-  opacity:0.7;
-  letter-spacing:4px;
-}
+    html {
+      min-height: 100%;
+      background: var(--bg);
+    }
 
-.intro-big{
-  font-size:34px;
-  color:#00ffd0;
-  margin-top:10px;
-  animation:pulse 1.2s infinite alternate;
-}
+    body {
+      min-height: 100vh;
+      margin: 0;
+      font-family: Orbitron, sans-serif;
+      color: #eaffff;
+      background: var(--bg);
+      overflow-x: hidden;
+    }
 
-@keyframes pulse{
-  from{transform:scale(1); opacity:0.7;}
-  to{transform:scale(1.05); opacity:1;}
-}
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle at 16% 18%, rgba(0, 255, 210, .24), transparent 36%),
+        radial-gradient(circle at 82% 22%, rgba(74, 163, 255, .22), transparent 40%),
+        radial-gradient(circle at 50% 92%, rgba(255, 77, 109, .16), transparent 42%),
+        linear-gradient(180deg, rgba(5, 11, 16, .1), rgba(5, 11, 16, .9));
+      z-index: -2;
+    }
 
-.intro-sub{
-  margin-top:10px;
-  font-size:12px;
-  opacity:0.6;
-}
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        linear-gradient(rgba(255, 255, 255, .035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, .025) 1px, transparent 1px);
+      background-size: 46px 46px;
+      mask-image: linear-gradient(to bottom, #000, transparent 88%);
+      opacity: .22;
+      z-index: -1;
+    }
 
-/* ================= MAIN ================= */
-.container{
-  max-width:900px;
-  margin:auto;
-  padding:20px;
-}
+    #intro {
+      position: fixed;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      text-align: center;
+      background: rgba(3, 7, 11, .92);
+      z-index: 10;
+      transition: opacity 900ms ease;
+    }
 
-.header{
-  text-align:center;
-  margin-bottom:10px;
-}
-.header h1{
-  font-size:12px;
-  letter-spacing:4px;
-  opacity:0.7;
-}
-.header h2{
-  font-size:22px;
-  color:#00ffd0;
-}
+    .intro-title {
+      font-size: 12px;
+      letter-spacing: 4px;
+      color: var(--muted);
+    }
 
-.panel{
-  background:rgba(0,0,0,0.3);
-  border:1px solid rgba(0,255,210,0.2);
-  border-radius:16px;
-  padding:16px;
-  margin:10px 0;
-}
+    .intro-big {
+      margin-top: 12px;
+      font-size: clamp(30px, 8vw, 70px);
+      font-weight: 800;
+      color: var(--cyan);
+      text-shadow: 0 0 30px rgba(0, 255, 210, .55);
+    }
 
-/* WIN SCREEN */
-.win{
-  display:none;
-  text-align:center;
-}
+    .intro-sub {
+      margin-top: 14px;
+      font-size: 12px;
+      letter-spacing: 2px;
+      color: var(--muted);
+    }
 
-.trophy{
-  font-size:60px;
-  animation:pop 1s ease infinite alternate;
-}
+    canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 5;
+    }
 
-@keyframes pop{
-  from{transform:scale(1);}
-  to{transform:scale(1.1);}
-}
+    .container {
+      width: min(960px, 100%);
+      margin: 0 auto;
+      padding: 20px;
+    }
 
-.winner-name{
-  font-size:26px;
-  color:#00ffd0;
-  margin-top:8px;
-}
+    .header {
+      padding: 10px 0 18px;
+      text-align: center;
+    }
 
-.sub{
-  font-size:13px;
-  opacity:0.75;
-}
+    .header h1 {
+      margin: 0 0 8px;
+      font-size: 12px;
+      letter-spacing: 4px;
+      color: var(--muted);
+    }
 
-.prize{
-  margin-top:10px;
-  font-size:14px;
-  color:#ffd700;
-}
+    .header h2 {
+      margin: 0;
+      font-size: clamp(24px, 7vw, 44px);
+      color: var(--cyan);
+      text-shadow: 0 0 24px rgba(0, 255, 210, .4);
+    }
 
-.card{
-  display:flex;
-  justify-content:space-between;
-  padding:10px;
-  border-radius:12px;
-  margin-top:6px;
-  background:rgba(255,255,255,0.03);
-  border:1px solid rgba(255,255,255,0.08);
-}
+    .grid {
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 14px;
+      align-items: stretch;
+    }
 
-.kills{
-  color:#00ffd0;
-}
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: 0 0 28px rgba(0, 255, 210, .055);
+      backdrop-filter: blur(14px);
+    }
 
-.out{
-  color:#ff4d6d;
-  font-size:11px;
-  margin-left:6px;
-}
+    .champion {
+      display: grid;
+      min-height: 360px;
+      place-items: center;
+      text-align: center;
+      overflow: hidden;
+      position: relative;
+    }
 
-.copyright{
-  text-align:center;
-  font-size:10px;
-  opacity:0.35;
-  letter-spacing:2px;
-  margin-top:20px;
-}
+    .champion::before {
+      content: "";
+      position: absolute;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 215, 0, .22), transparent 62%);
+      filter: blur(2px);
+    }
 
-canvas{
-  position:fixed;
-  top:0;
-  left:0;
-  pointer-events:none;
-}
-</style>
+    .champion-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .trophy {
+      font-size: 72px;
+      line-height: 1;
+      filter: drop-shadow(0 0 24px rgba(255, 215, 0, .35));
+      animation: trophyPop 1500ms ease-in-out infinite alternate;
+    }
+
+    @keyframes trophyPop {
+      from { transform: translateY(0) scale(1); }
+      to { transform: translateY(-4px) scale(1.05); }
+    }
+
+    .winner-label {
+      margin-top: 18px;
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: var(--gold);
+    }
+
+    .winner-name {
+      margin-top: 8px;
+      font-size: clamp(30px, 8vw, 58px);
+      font-weight: 800;
+      color: #fff7b0;
+      text-shadow: 0 0 26px rgba(255, 215, 0, .28);
+    }
+
+    .winner-kills {
+      margin-top: 10px;
+      font-size: 14px;
+      color: var(--cyan);
+    }
+
+    .prize {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 18px;
+      padding: 10px 14px;
+      border: 1px solid rgba(255, 215, 0, .34);
+      border-radius: 999px;
+      color: var(--gold);
+      background: rgba(255, 215, 0, .08);
+      font-size: 12px;
+    }
+
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      font-size: 12px;
+      letter-spacing: 2px;
+      color: var(--muted);
+    }
+
+    .section-title strong {
+      color: #eaffff;
+    }
+
+    .final-statement {
+      margin-bottom: 16px;
+      padding: 18px;
+      border-radius: 14px;
+      text-align: center;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(0, 255, 210, .14), transparent 62%),
+        rgba(255, 255, 255, .04);
+      border: 1px solid rgba(0, 255, 210, .18);
+    }
+
+    .survivor-count {
+      font-size: clamp(44px, 10vw, 68px);
+      font-weight: 800;
+      color: var(--cyan);
+      text-shadow: 0 0 22px rgba(0, 255, 210, .35);
+    }
+
+    .survivor-copy {
+      margin-top: 10px;
+      font-size: 13px;
+      line-height: 1.7;
+      color: var(--muted);
+    }
+
+    .survivor-copy strong {
+      color: #fff7b0;
+    }
+
+    .card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 13px;
+      margin-top: 9px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, .09);
+      background: linear-gradient(90deg, rgba(0, 255, 210, .08), rgba(255, 255, 255, .035));
+    }
+
+    .rank-name {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .rank {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      border-radius: 10px;
+      background: rgba(0, 255, 210, .12);
+      border: 1px solid rgba(0, 255, 210, .26);
+    }
+
+    .player-name {
+      overflow-wrap: anywhere;
+      font-size: 14px;
+    }
+
+    .badge {
+      flex: 0 0 auto;
+      font-size: 10px;
+      letter-spacing: 1px;
+      color: var(--red);
+    }
+
+    .badge.champion-badge {
+      color: var(--gold);
+    }
+
+    .kills {
+      flex: 0 0 auto;
+      color: var(--cyan);
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    .update {
+      margin-top: 14px;
+      padding: 13px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, .08);
+      background: rgba(255, 255, 255, .035);
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.7;
+    }
+
+    .copyright {
+      width: fit-content;
+      margin: 18px auto 6px;
+      padding: 10px 16px;
+      border: 1px solid rgba(0, 255, 210, .42);
+      border-radius: 999px;
+      background:
+        linear-gradient(90deg, rgba(0, 255, 210, .14), rgba(255, 215, 0, .09));
+      box-shadow:
+        0 0 18px rgba(0, 255, 210, .18),
+        0 0 34px rgba(255, 215, 0, .08);
+      text-align: center;
+      font-size: 11px;
+      color: rgba(234, 255, 255, .92);
+      letter-spacing: 2.5px;
+    }
+
+    .copyright strong {
+      color: #fff7b0;
+      text-shadow:
+        0 0 10px rgba(255, 215, 0, .45),
+        0 0 20px rgba(0, 255, 210, .28);
+    }
+
+    @media (max-width: 760px) {
+      .container {
+        padding: 14px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .champion {
+        min-height: 330px;
+      }
+
+      .final-statement {
+        padding: 14px;
+      }
+
+      .card {
+        display: grid;
+        grid-template-columns: 1fr auto;
+      }
+
+      .badge {
+        grid-column: 1;
+        padding-left: 44px;
+      }
+
+      .kills {
+        grid-column: 2;
+        grid-row: 1 / span 2;
+        align-self: center;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
 </head>
 
 <body>
-
-<!-- 🎬 INTRO -->
-<div id="intro">
-  <div class="intro-title">SENIOR ASSASSIN</div>
-  <div class="intro-big">38 PLAYERS ENTERED</div>
-  <div class="intro-sub">ONLY ONE SURVIVES...</div>
-</div>
-
-<canvas id="confetti"></canvas>
-
-<div class="container">
-
-  <div class="header">
-    <h1>GRADE 9 SENIOR ASSASSIN</h1>
-    <h2>FINAL SURVIVAL REPORT</h2>
-  </div>
-
-  <!-- WIN SCREEN -->
-  <div class="panel win" id="winScreen">
-
-    <div class="trophy">🏆</div>
-    <div class="winner-name" id="winnerName"></div>
-    <div class="sub" id="winnerKills"></div>
-    <div class="prize">WINNER • $25 GIFT CARD 💰</div>
-
-    <div class="panel" style="margin-top:15px;">
-      <div style="font-size:12px;opacity:0.7;">FINAL TOP 3 (EXEPT WINNER ALL OTHERS ELIMINATED)</div>
-      <div id="top3"></div>
+  <div id="intro">
+    <div>
+      <div class="intro-title">SENIOR ASSASSIN FINALE</div>
+      <div class="intro-big">38 PLAYERS ENTERED</div>
+      <div class="intro-sub">ONE CHAMPION REMAINS</div>
     </div>
-
   </div>
 
-  <div class="copyright">© 2026 VRISHAB VARUN</div>
+  <canvas id="confetti"></canvas>
 
-</div>
+  <main class="container">
+    <header class="header">
+      <h1>GRADE 9 SENIOR ASSASSIN</h1>
+      <h2>FINAL SURVIVAL REPORT</h2>
+    </header>
 
-<script>
+    <section class="grid">
+      <div class="panel champion">
+        <div class="champion-inner">
+          <div class="trophy">🏆</div>
+          <div class="winner-label">2026 CHAMPION</div>
+          <div class="winner-name" id="winnerName"></div>
+          <div class="winner-kills" id="winnerKills"></div>
+          <div class="prize" id="prize"></div>
+        </div>
+      </div>
 
-/* =========================
-   EDIT ONLY THIS SECTION
-========================= */
+      <div class="panel">
+        <div class="section-title">
+          <strong>FINAL RESULT</strong>
+          <span id="lastUpdated"></span>
+        </div>
 
-const players = [
-  {name:"Dante Larizza", kills:10},
-  {name:"Adriel Callangan", kills:8},
-  {name:"Vrishab Varun", kills:6},
-  {name:"Player 4", kills:3}
-];
+        <div class="final-statement">
+          <div class="survivor-count" id="survivorCount"></div>
+          <div class="survivor-copy" id="survivorCopy"></div>
+        </div>
 
-/* ========================= */
+        <div class="section-title">
+          <strong>FINAL TOP 3</strong>
+          <span>SEASON RESULTS</span>
+        </div>
+        <div id="top3"></div>
 
-const intro = document.getElementById("intro");
-const winScreen = document.getElementById("winScreen");
-const winnerName = document.getElementById("winnerName");
-const winnerKills = document.getElementById("winnerKills");
-const top3 = document.getElementById("top3");
+        <div class="update" id="updateText"></div>
+      </div>
+    </section>
 
-/* CONFETTI */
-const canvas = document.getElementById("confetti");
-const ctx = canvas.getContext("2d");
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+    <div class="copyright">SITE BY <strong>VRISHAB VARUN</strong></div>
+  </main>
 
-let pieces = [];
+  <script>
+    /* =========================
+       EDIT ONLY THIS SECTION
+    ========================= */
 
-for(let i=0;i<200;i++){
-  pieces.push({
-    x:Math.random()*canvas.width,
-    y:Math.random()*canvas.height,
-    r:Math.random()*6+2,
-    d:Math.random()*10+2,
-    color:`hsl(${Math.random()*360},100%,60%)`
-  });
-}
+    const GAME = {
+      totalPlayers: 38,
+      prize: "$25 GIFT CARD",
+      lastUpdated: "FRIDAY, JUNE 5TH",
+      update: "The game is complete. Winner has been crowned."
+    };
 
-function draw(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  pieces.forEach(p=>{
-    ctx.fillStyle=p.color;
-    ctx.fillRect(p.x,p.y,p.r,p.r);
-    p.y += p.d;
-    if(p.y>canvas.height) p.y=0;
-  });
-  requestAnimationFrame(draw);
-}
+    const players = [
+      { name:"Dante Larizza", kills:10 },
+      { name:"Adriel Callangan", kills:8 },
+      { name:"Vrishab Varun", kills:6 },
+      { name:"Player 4", kills:3 }
+    ];
 
-/* MAIN RENDER */
-function showFinal(){
+    const finalPlacements = [
+      "Dante Larizza",
+      "Adriel Callangan",
+      "Vrishab Varun"
+    ];
 
-  const sorted = [...players].sort((a,b)=>b.kills-a.kills);
+    /* =========================
+       DO NOT EDIT BELOW
+    ========================= */
 
-  const first = sorted[0];
-  const second = sorted[1];
-  const third = sorted[2];
+    const intro = document.getElementById("intro");
+    const winnerName = document.getElementById("winnerName");
+    const winnerKills = document.getElementById("winnerKills");
+    const prize = document.getElementById("prize");
+    const lastUpdated = document.getElementById("lastUpdated");
+    const survivorCount = document.getElementById("survivorCount");
+    const survivorCopy = document.getElementById("survivorCopy");
+    const top3 = document.getElementById("top3");
+    const updateText = document.getElementById("updateText");
 
-  winnerName.innerText = `👑 ${first.name} WINS`;
-  winnerKills.innerText = `${first.kills} ELIMINATIONS`;
+    const placementIcons = ["🥇", "🥈", "🥉"];
 
-  top3.innerHTML = `
-    <div class="card">🥇 ${first.name} <span class="kills">${first.kills}</span></div>
-    <div class="card">🥈 ${second.name} <span class="out">OUT</span> <span class="kills">${second.kills}</span></div>
-    <div class="card">🥉 ${third.name} <span class="out">OUT</span> <span class="kills">${third.kills}</span></div>
-  `;
+    function findPlayer(name) {
+      return players.find(player => player.name === name) || { name, kills: 0 };
+    }
 
-  winScreen.style.display="block";
-  draw();
-}
+    function renderFinale() {
+      const winner = findPlayer(finalPlacements[0]);
 
-/* INTRO SEQUENCE */
-setTimeout(()=>{
-  intro.style.opacity="0";
-  intro.style.transition="1.2s ease";
+      winnerName.innerText = winner.name;
+      winnerKills.innerText = `${winner.kills} ELIMINATIONS`;
+      prize.innerText = `WINNER • ${GAME.prize}`;
+      lastUpdated.innerText = GAME.lastUpdated;
+      survivorCount.innerText = `1 / ${GAME.totalPlayers}`;
+      survivorCopy.innerHTML = `Out of ${GAME.totalPlayers} players, only <strong>${winner.name}</strong> remained.`;
+      updateText.innerText = GAME.update;
 
-  setTimeout(()=>{
-    intro.style.display="none";
-    showFinal();
-  },1200);
+      top3.innerHTML = finalPlacements.map((name, index) => {
+        const player = findPlayer(name);
+        const badge = index === 0 ? "CHAMPION" : "ELIMINATED";
 
-},3500);
+        return `
+          <div class="card">
+            <div class="rank-name">
+              <div class="rank">${placementIcons[index]}</div>
+              <div class="player-name">${player.name}</div>
+            </div>
+            <div class="badge ${index === 0 ? "champion-badge" : ""}">${badge}</div>
+            <div class="kills">${player.kills} ELIMS</div>
+          </div>
+        `;
+      }).join("");
+    }
 
-</script>
+    const canvas = document.getElementById("confetti");
+    const ctx = canvas.getContext("2d");
+    let pieces = [];
 
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    function createConfetti() {
+      pieces = Array.from({ length: 170 }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height - canvas.height,
+        size: Math.random() * 7 + 3,
+        speed: Math.random() * 3 + 2,
+        tilt: Math.random() * 8,
+        color: `hsl(${Math.random() * 360}, 100%, 62%)`
+      }));
+    }
+
+    function drawConfetti() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      pieces.forEach(piece => {
+        ctx.fillStyle = piece.color;
+        ctx.fillRect(piece.x, piece.y, piece.size, piece.size / 1.8);
+        piece.y += piece.speed;
+        piece.x += Math.sin(piece.y / 30) * .8;
+
+        if (piece.y > canvas.height) {
+          piece.y = -20;
+          piece.x = Math.random() * canvas.width;
+        }
+      });
+
+      requestAnimationFrame(drawConfetti);
+    }
+
+    window.addEventListener("resize", () => {
+      resizeCanvas();
+      createConfetti();
+    });
+
+    renderFinale();
+    resizeCanvas();
+    createConfetti();
+
+    setTimeout(() => {
+      intro.style.opacity = "0";
+
+      setTimeout(() => {
+        intro.style.display = "none";
+        drawConfetti();
+      }, 900);
+    }, 2400);
+  </script>
 </body>
 </html>
